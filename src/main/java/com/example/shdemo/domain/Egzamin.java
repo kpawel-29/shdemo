@@ -1,12 +1,19 @@
 package com.example.shdemo.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+
 
 
 @Entity
@@ -19,8 +26,19 @@ import javax.persistence.NamedQuery;
 public class Egzamin {
 
 	private int id;	
+	private List<Student> students = new ArrayList<Student>();
 	private String przedmiot;
 	private int ects;
+	
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	public List<Student> getStudents() {
+		return students;
+	}
+
+	public void setStudents(List<Student> students) {
+		this.students = students;
+	}
 
 	public Egzamin(int id, String przedmiot, int ects){
 		super();
@@ -54,7 +72,7 @@ public class Egzamin {
 		return przedmiot;
 	}
 	
-	//@Column
+	@Column
 	public int getEcts() {
 		return ects;
 	}
