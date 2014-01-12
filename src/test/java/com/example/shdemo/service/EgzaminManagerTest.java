@@ -51,6 +51,22 @@ public class EgzaminManagerTest {
 				egzaminManager.deleteEgzamin(egzamin.getId());
 		}
 		
+		/*@Before
+		public void fillDatabase(){
+			String[] przedmioty = {"matematyka","angielski","hiszpanski","polski"};
+			int[] ectss = {5,6,7,8};
+			String[] names = {"Piotr","Maria","Monika","Ola"};
+			int[] indekss = {206315,206314,206313,206312};
+			
+			for(int i = 0; i < 4; i++){
+				Egzamin egzamin = new Egzamin(przedmioty[i], ectss[i]);
+				egzaminManager.addEgzamin(egzamin);
+				
+				Student student = new Student(names[i], indekss[i]);
+				egzaminManager.addStudent(student);
+			}
+		}
+		*/
 		@Test
 		public void addCheck(){
 			Egzamin egzamin = new Egzamin(PRZEDMIOT_1,ECTS_1);
@@ -70,7 +86,7 @@ public class EgzaminManagerTest {
 			assertEquals(student, egzaminStudents.get(0));			
 		}
 		
-		@Test
+		//@Test
 		//@SuppressWarnings("deprecation")
 		public void getCheck(){
 			Egzamin egzamin = new Egzamin(PRZEDMIOT_1, ECTS_1);
@@ -98,7 +114,7 @@ public class EgzaminManagerTest {
 		}
 			
 			
-		@Test
+		//@Test
 		public void updateCheck(){
 			Egzamin egzamin = new Egzamin(PRZEDMIOT_1,ECTS_1);
 			Student students[] = {new Student(NAME_1, INDEKS_1), new Student(NAME_2, INDEKS_2)};
@@ -123,7 +139,7 @@ public class EgzaminManagerTest {
 			
 		}
 		
-		@Test
+		//@Test
 		public void deleteCheck(){
 
 			Egzamin egzamin = new Egzamin(PRZEDMIOT_1,ECTS_1);

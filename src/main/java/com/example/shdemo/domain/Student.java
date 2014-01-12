@@ -16,7 +16,8 @@ import javax.persistence.NamedQuery;
 	@NamedQuery(name = "student.byName", query = "select s from Student s where s.name =:name"),
 	@NamedQuery(name = "student.countStudentWithName", query = "select count(s) from Student s where s.name = :name"),
 	@NamedQuery(name = "student.getStudentsWithName", query = "select s from Student s where s.name =:name") 
-
+	//@NamedQuery(name = "student.getId", query = "select s.id from Student s where s.name =:name") 
+	
 	
 	
 })

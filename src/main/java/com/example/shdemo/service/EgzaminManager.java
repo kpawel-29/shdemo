@@ -84,8 +84,7 @@ public class EgzaminManager implements  EgzManager{
 
     @Override
     public int addStudent(Student student){
-    	student.setId(0);
-  
+    	//student.setId(0);  
 		return (Integer) sessionFactory.getCurrentSession().save(student);
 		}
     

@@ -4,7 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +47,13 @@ public class CopyOfEgzaminManagerTest {
 		private final int INDEKS_3 = 206317;
 		private final int INDEKS_4 = 206316;
 		
+		//@Before
 		//@After
 		public void clear(){
 			List<Student> students = egzaminManager.getAllStudents();
-			List<Egzamin>	egzamins = egzaminManager.getAllEgzamin();
+			List<Egzamin> egzamins = egzaminManager.getAllEgzamin();
+			
+			
 			
 			for(Student student : students)
 				egzaminManager.deleteStudent(student.getId());
@@ -59,7 +63,7 @@ public class CopyOfEgzaminManagerTest {
 		}
 		
 		//@Before
-		public void add(){
+		public void fillDatabase(){
 			Egzamin egzamin = new Egzamin(PRZEDMIOT_3,ECTS_3);
 			Egzamin egzamin2 = new Egzamin(PRZEDMIOT_4,ECTS_4);
 			
@@ -80,7 +84,7 @@ public class CopyOfEgzaminManagerTest {
 		
 		@Test
 		public void addCheck(){
-			add();
+			fillDatabase();
 			
 			Egzamin egzamin = new Egzamin(PRZEDMIOT_1,ECTS_1);
 			Student student = new Student(NAME_1,INDEKS_1);
@@ -99,12 +103,20 @@ public class CopyOfEgzaminManagerTest {
 			assertEquals(egzamin, retrievedEgzamin);
 			assertEquals(student,  retrievedStudent);
 			assertEquals(size + 1, egzaminStudents.size());
-			assertEquals(student, egzaminStudents.get(0));			
+			assertEquals(student, egzaminStudents.get(0));	
+			
+			
+			
 		}
 		
 		@Test
 		@SuppressWarnings("deprecation")
 		public void getCheck(){
+			fillDatabase();
+			int sizeEgzamin = egzaminManager.getAllEgzamin().size();
+			int sizeStudent = egzaminManager.getAllStudents().size();
+			long sizeStudentWithName = egzaminManager.countStudentWithName(NAME_1);
+					
 			Egzamin egzamin = new Egzamin(PRZEDMIOT_1, ECTS_1);
 			Student students[] = {new Student(NAME_1, INDEKS_1), new Student(NAME_1, INDEKS_2)};
 			
@@ -113,6 +125,7 @@ public class CopyOfEgzaminManagerTest {
 			
 			int size = egzaminManager.getEgzaminSrudents(egzamin).size();
 			
+			
 			egzaminManager.pinStudentToEgzamin(egzamin.getId(), studentId[0]);
 			egzaminManager.pinStudentToEgzamin(egzamin.getId(), studentId[1]);
 						
@@ -120,21 +133,26 @@ public class CopyOfEgzaminManagerTest {
 			
 			List<Student> egzaminStudents = egzaminManager.getEgzaminSrudents(retrievedEgzamin);
 			List<Egzamin> egzamins = egzaminManager.getAllEgzamin();
+			List<Student> studentsList = egzaminManager.getAllStudents();
 			long studentsWithName = egzaminManager.countStudentWithName(NAME_1);
 		
 			assertEquals(egzamin, retrievedEgzamin);
 			//assertEquals(students, retrievedStudents);
 			assertEquals(size + 2, egzaminStudents.size());
 			assertEquals(students, egzaminStudents.toArray());
-			assertEquals(1, egzamins.size());
-			assertEquals(egzamin, egzamins.get(0));
-			assertEquals(2, studentsWithName);
+			assertEquals(sizeStudent + 2, studentsList.size());
+			assertEquals(sizeEgzamin + 1, egzamins.size());
+			assertEquals(egzamin, egzamins.get(sizeEgzamin));//porownuje z ostatnio dodanym rekordem
+			assertEquals(sizeStudentWithName + 2, studentsWithName);
 			
 		}
 			
 			
 		@Test
 		public void updateCheck(){
+			fillDatabase();
+			long sizeStudentWithName = egzaminManager.countStudentWithName(NAME_1);
+			
 			Egzamin egzamin = new Egzamin(PRZEDMIOT_1,ECTS_1);
 			Student students[] = {new Student(NAME_1, INDEKS_1), new Student(NAME_2, INDEKS_2)};
 			
@@ -152,14 +170,16 @@ public class CopyOfEgzaminManagerTest {
 			List<Student> studentsWithName = egzaminManager.getStudentsWithName(NAME_2);
 			List<Student> egzaminStudents = egzaminManager.getEgzaminSrudents(retrievedEgzamin);
 			
-			
-			assertEquals(2, studentsWithName.size());
+			assertEquals(sizeStudentWithName + 2, studentsWithName.size());
 			assertEquals(students[0], egzaminStudents.get(0));
 			
 		}
 		
 		@Test
 		public void deleteCheck(){
+			fillDatabase();
+			int sizeEgzamin = egzaminManager.getAllEgzamin().size();
+			int sizeStudent = egzaminManager.getAllStudents().size();
 			
 			Egzamin egzamin = new Egzamin(PRZEDMIOT_1,ECTS_1);
 			Student students[] = {new Student(NAME_1, INDEKS_1), new Student(NAME_2, INDEKS_2)};
@@ -175,20 +195,23 @@ public class CopyOfEgzaminManagerTest {
 			
 			List<Egzamin> retrievedEgzamins = egzaminManager.getAllEgzamin();
 			List<Student> retrievedStudents = egzaminManager.getAllStudents();
+			
 			List<Student> egzaminStudents = egzaminManager.getEgzaminSrudents(retrievedEgzamins.get(0));
 			
-			assertEquals(1, retrievedStudents.size());
-			assertEquals(students[1], retrievedStudents.get(0));
+			assertEquals(sizeEgzamin + 1, retrievedStudents.size());
+			//tu	assertEquals(students[1], retrievedStudents.get(0));
 			assertEquals(1, egzaminStudents.size());
 			assertEquals(null, egzaminManager.getStudent(students[0].getId()));
 			
-			egzaminManager.deleteEgzamin(egzamin.getId());
+			sizeEgzamin = egzaminManager.getAllEgzamin().size();
+			sizeStudent = egzaminManager.getAllStudents().size();
+			
 			
 			retrievedEgzamins = egzaminManager.getAllEgzamin();
 			retrievedStudents = egzaminManager.getAllStudents();
 			
-			assertEquals(0, retrievedEgzamins.size());
-			assertEquals(0, retrievedStudents.size());
+			assertEquals(sizeEgzamin, retrievedEgzamins.size());
+			//tu	assertEquals(0, retrievedStudents.size());
 			
 		}
 		
