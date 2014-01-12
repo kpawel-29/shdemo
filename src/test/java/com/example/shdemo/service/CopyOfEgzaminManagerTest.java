@@ -199,7 +199,7 @@ public class CopyOfEgzaminManagerTest {
 			List<Student> egzaminStudents = egzaminManager.getEgzaminSrudents(retrievedEgzamins.get(0));
 			
 			assertEquals(sizeEgzamin + 1, retrievedStudents.size());
-			//tu	assertEquals(students[1], retrievedStudents.get(0));
+			assertEquals(students[1], retrievedStudents.get(sizeStudent));//porównuje z odtatnio dodanym rekordem
 			assertEquals(1, egzaminStudents.size());
 			assertEquals(null, egzaminManager.getStudent(students[0].getId()));
 			
@@ -211,7 +211,7 @@ public class CopyOfEgzaminManagerTest {
 			retrievedStudents = egzaminManager.getAllStudents();
 			
 			assertEquals(sizeEgzamin, retrievedEgzamins.size());
-			//tu	assertEquals(0, retrievedStudents.size());
+			assertEquals(sizeStudent, retrievedStudents.size());
 			
 		}
 		
